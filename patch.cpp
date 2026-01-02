@@ -78,8 +78,12 @@ void CPatch::ApplyParam(const char* key, float f)
 		m_pVoices->SetKbdTrk(f);
 	else if (strcmp(key, "Lfo-Freq") == 0)
 		m_pVoices->SetLfoFreq(f);
-	else if (strcmp(key, "Lfo-Wave") == 0)
-		m_pVoices->SetLfoWave(f);
+	else if (strcmp(key, "Lfo-Saw") == 0)
+		m_pVoices->SetLfoWaveSaw(f);
+	else if (strcmp(key, "Lfo-Square") == 0)
+		m_pVoices->SetLfoWaveSquare(f);
+	else if (strcmp(key, "Lfo-Tri") == 0)
+		m_pVoices->SetLfoWaveTri(f);
 	else if (strcmp(key, "Lfo-Mix") == 0)
 		m_pVoices->SetLfoMix(f);
 	else if (strcmp(key, "Lfo-Filter") == 0)

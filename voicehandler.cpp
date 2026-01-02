@@ -350,11 +350,25 @@ void CVoiceHandler::SetLfoFreq(float freq)
 	}
 }
 
-void CVoiceHandler::SetLfoWave(unsigned wave)
+void CVoiceHandler::SetLfoWaveSaw(bool wave)
 {
 	for (unsigned i = 0; i < VH_MAX_VOICES; ++i)
 	{
-		m_voices[i].SetLfoWave(wave);
+		m_voices[i].SetLfoWaveSaw(wave);
+	}
+}
+void CVoiceHandler::SetLfoWaveSquare(bool wave)
+{
+	for (unsigned i = 0; i < VH_MAX_VOICES; ++i)
+	{
+		m_voices[i].SetLfoWaveSquare(wave);
+	}
+}
+void CVoiceHandler::SetLfoWaveTri(bool wave)
+{
+	for (unsigned i = 0; i < VH_MAX_VOICES; ++i)
+	{
+		m_voices[i].SetLfoWaveTri(wave);
 	}
 }
 

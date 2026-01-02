@@ -30,8 +30,9 @@ public:
 	
 	void Reset();
 	
-	
 	inline float PolyBlep(float t, float dt);
+	inline float PolyBlamp(float t, float dt);
+	
 	float GetSaw(void);
 	float GetSquare(void);
 	float GetTri(void);
@@ -52,7 +53,6 @@ private:
 	float m_currentFrequency;
 	float m_targetFrequency;
 	float m_note;
-	float m_triState;
 	
 	float	m_glideTime;
 	

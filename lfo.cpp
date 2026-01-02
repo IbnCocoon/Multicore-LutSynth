@@ -6,6 +6,9 @@
 
 CLFO::CLFO(unsigned sampleRate)
 : m_sampleRate(sampleRate),
+  m_waveSaw(0.0f),
+  m_waveSquare(0.0f),
+  m_waveTri(1.0f),
   m_frequency(1.0f),
   m_phase(0.0f),
   m_phaseInc(0.0f)
@@ -17,21 +20,6 @@ void CLFO::Init(float sampleRate)
     m_sampleRate = sampleRate;
     SetFrequency(m_frequency);
     m_phase = 0.0f;
-}
-
-void CLFO::SetWaveform(unsigned wave)
-{
-	switch(wave)
-	{
-		case 0: m_waveform = WaveformMode::Saw; break;
-		case 1: m_waveform = WaveformMode::Square; break;
-		case 2: m_waveform = WaveformMode::Tri; break;
-		case 3: m_waveform = WaveformMode::SawSquare; break;
-		case 4: m_waveform = WaveformMode::SawTri; break;
-		case 5: m_waveform = WaveformMode::SquareTri; break;
-		case 6: m_waveform = WaveformMode::SawSquareTri; break;
-		default:m_waveform = WaveformMode::Saw; break;
-	}
 }
 
 void CLFO::SetFrequency(float freqHz)
@@ -55,7 +43,6 @@ float CLFO::GetSample(void)
     float saw = 0.0f;
     float square = 0.0f;
     float tri = 0.0f;
-    float sample = 0.0f;
 
 	// triangle //
 	if (m_phase < 0.25f)
@@ -75,16 +62,5 @@ float CLFO::GetSample(void)
     if (m_phase >= 1.0f)
         m_phase -= 1.0f;
 
-    switch (m_waveform)
-    {
-		case WaveformMode::Saw: sample = saw; break;
-		case WaveformMode::Square: sample = square; break;
-		case WaveformMode::Tri: sample = tri; break;
-		case WaveformMode::SawSquare: sample = (saw + square) * 0.5f; break;
-		case WaveformMode::SawTri: sample = (saw + tri) * 0.5f; break;
-		case WaveformMode::SquareTri: sample = (square + tri) * 0.5f; break;
-		case WaveformMode::SawSquareTri: sample = (saw + square + tri) * 0.333f; break;
-    }
-    
-    return sample;
+    return (square * m_waveSquare - saw * m_waveSaw + tri * m_waveTri);
 }

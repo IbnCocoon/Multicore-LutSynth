@@ -66,12 +66,14 @@
 #define CC_LFO_PWM2		40
 #define CC_LFO_FILTER	41
 #define CC_LFO_FREQ		42
-#define CC_LFO_WAVE		43
+#define CC_LFO_SAW		43
+#define CC_LFO_SQUARE	62
+#define CC_LFO_TRI		63
 #define CC_LFO_MIX		44
 
-#define CC_POLYMOD_FREQ 46
-#define CC_POLYMOD_PW   47
-#define CC_POLYMOD_FIL  48
+#define CC_POLYMOD_FREQ   46
+#define CC_POLYMOD_PW     47
+#define CC_POLYMOD_FIL    48
 #define CC_POLYMOD_OSC2   49
 #define CC_POLYMOD_FILENV 50
 

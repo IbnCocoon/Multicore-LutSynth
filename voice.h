@@ -46,7 +46,9 @@ public:
 	
 	// Lfo Parameters
 	void SetLfoFreq(float freq);
-	void SetLfoWave(unsigned wave);
+	void SetLfoWaveSaw(bool wave);
+	void SetLfoWaveSquare(bool wave);
+	void SetLfoWaveTri(bool wave);
 	void SetLfoFm(unsigned osc, float fm){ m_lfoFm[osc] = fm; }
 	void SetPulseWidthModulation(unsigned osc, float pwm){ m_lfoPwm[osc] = pwm; }
 	void SetLfoFilter(float fil){ m_lfoFilter = fil; }
@@ -113,7 +115,9 @@ private:
 	
 	// Lfo
 	float 		m_lfoFreq;
-	unsigned	m_lfoWave;
+	bool  		m_lfoWaveSaw;
+	bool  		m_lfoWaveSquare;
+	bool  		m_lfoWaveTri;
 	float		m_lfoMix;
 	float	 	m_lfoFm[2];
 	float 		m_lfoPwm[2];

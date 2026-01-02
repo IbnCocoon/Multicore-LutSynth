@@ -47,7 +47,9 @@ CVoice::CVoice(unsigned sampleRate)
   
   // Lfo
   m_lfoFreq(0.1f),
-  m_lfoWave(0.4f),
+  m_lfoWaveSaw(false),
+  m_lfoWaveSquare(false),
+  m_lfoWaveTri(true),
   m_lfoMix(1.0f),
   m_lfoFm{ false , false },
   m_lfoPwm{ 0, 0 },
@@ -108,7 +110,9 @@ void CVoice::InitVoice(unsigned sampleRate)
 	m_filKbdTrkAmt = 0.0f;
 	
 	m_lfoFreq = 0.5f;
-	m_lfoWave = 2;
+	m_lfoWaveSaw = false;
+	m_lfoWaveSquare = false;
+	m_lfoWaveTri = true;
 	m_lfoMix = 1.0f;
 	m_lfoFm[0] = 0;
 	m_lfoFm[1] = 0;
@@ -165,7 +169,9 @@ void CVoice::SetGlideTime(float time)
 }
 
 void CVoice::SetLfoFreq(float freq) { m_lfo.SetFrequency(freq); }
-void CVoice::SetLfoWave(unsigned wave) { m_lfo.SetWaveform(wave); }
+void CVoice::SetLfoWaveSaw(bool wave) { m_lfoWaveSaw = wave; }
+void CVoice::SetLfoWaveSquare(bool wave) { m_lfoWaveSquare = wave; }
+void CVoice::SetLfoWaveTri(bool wave) { m_lfoWaveTri = wave; }
 
 void CVoice::SetEnv(unsigned param, float value)
 {
@@ -196,21 +202,9 @@ void CVoice::SetCoarse(unsigned osc, float coarse)
 	}
 }
 
-void CVoice::SetWaveformSaw(unsigned osc, bool wave)
-{
-	m_waveformSaw[osc] = wave;
-	m_osc[osc].SetWaveformSaw(1.0f);
-}
-void CVoice::SetWaveformSquare(unsigned osc, bool wave)
-{
-	m_waveformSquare[osc] = wave;
-	m_osc[osc].SetWaveformSquare(1.0f);
-}
-void CVoice::SetWaveformTri(bool wave)
-{
-	m_waveformTri = wave;
-	m_osc[1].SetWaveformTri(1.0f);
-}
+void CVoice::SetWaveformSaw(unsigned osc, bool wave) { m_waveformSaw[osc] = wave; }
+void CVoice::SetWaveformSquare(unsigned osc, bool wave) { m_waveformSquare[osc] = wave; }
+void CVoice::SetWaveformTri(bool wave) { m_waveformTri = wave; }
 
 void CVoice::NoteOn(unsigned note, unsigned velocity)
 {
@@ -263,6 +257,9 @@ float CVoice::Render(void)
 	////////////////////
 	// LFO Processing //
 	////////////////////
+	m_lfo.SetWaveSaw(m_lfoWaveSaw);
+	m_lfo.SetWaveSquare(m_lfoWaveSquare);
+	m_lfo.SetWaveTri(m_lfoWaveTri);
 	float lfo = m_lfo.GetSample();		
 	float lfoMix = lfo * m_lfoMix + noise * (1.0f - m_lfoMix);
 	lfoMix *= m_modWheel;

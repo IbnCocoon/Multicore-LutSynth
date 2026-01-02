@@ -39,7 +39,6 @@ COscillator::COscillator()
   m_frequency(0.0f),
   m_currentFrequency(0.0f),
   m_targetFrequency(0.0f),
-  m_triState(0.0f),
   m_glideTime(1.0f),
   m_tableIndex(0),
   m_tableFrac(0.0f),
@@ -129,6 +128,47 @@ inline float COscillator::PolyBlep(float t, float dt)
     return 0.0f;
 }
 
+//https://dsp.stackexchange.com/questions/54790/polyblamp-anti-aliasing-in-c
+inline float COscillator::PolyBlamp(float t, float dt)
+{
+    float y = 0.0f;
+
+    if (t < dt)
+    {
+        float x = t / dt;
+        float x2 = x * x;
+        float x3 = x2 * x;
+        y += x3 / 6.0f;
+    }
+    else if (t > 1.0f - dt)
+    {
+        float x = (t - 1.0f) / dt;
+        float x2 = x * x;
+        float x3 = x2 * x;
+        y -= x3 / 6.0f;
+    }
+
+    return y * dt;
+}
+
+float COscillator::GetTri()
+{
+    // Naive triangle
+    float dt = m_phaseInc;
+    float t = m_phase < 0.5f ? m_phase : 1.0f - m_phase;
+    float tri = 4.0f * t - 1.0f;
+		
+	// slope discontinuities at t = 0, 0.5
+	float x = t + 0.5f;
+    if (x >= 1.0f) x -= 1.0f;
+    if (x <  0.0f) x += 1.0f;
+	
+    tri += PolyBlamp(t, dt);
+    tri -= PolyBlamp(x, dt);
+
+    return tri;
+}
+
 float COscillator::GetSaw()
 {
     float phase = m_phase;        // 0..1
@@ -162,21 +202,7 @@ float COscillator::GetSquare()
     return out;
 }
 
-float COscillator::GetTri()
-{
-    float phase = m_phase;
-    float dt = m_phaseInc;
-    float pw = 0.5f;  // 0..1
-    float sqOut = (phase < pw) ? 1.0f : -1.0f;
-    sqOut += PolyBlep(phase, dt);
-    float t2 = phase - pw;
-    if (t2 < 0.0f)
-		t2 += 1.0f;
-    sqOut -= PolyBlep(t2, dt);
 
-    m_triState = m_triState * 0.999f + sqOut * m_phaseInc;
-    return m_triState * 4.0f;
-}
 
 float COscillator::GetSample()
 {

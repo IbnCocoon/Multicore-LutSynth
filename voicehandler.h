@@ -63,7 +63,9 @@ public:
 	
 	// Lfo Parameters
 	void SetLfoFreq(float freq);
-	void SetLfoWave(unsigned wave);
+	void SetLfoWaveSaw(bool wave);
+	void SetLfoWaveSquare(bool wave);
+	void SetLfoWaveTri(bool wave);
 	void SetLfoFm(unsigned osc, bool fm);
 	void SetPulseWidthModulation(unsigned osc, bool pwm);
 	void SetLfoFilter(bool fil);

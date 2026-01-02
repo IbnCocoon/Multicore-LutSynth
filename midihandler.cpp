@@ -325,11 +325,21 @@ void CMidiHandler::HandleMidiMessage(u8 *pMessage, unsigned nLength)
 			float f = ExpLUT[idx] * 30.0f + 0.01f;
 			m_pVoices->SetLfoFreq(f);
 		}	
-		if (pMessage[1] == CC_LFO_WAVE)
+		if (pMessage[1] == CC_LFO_SAW)
 		{
-			unsigned w = pMessage[2]/21; // 0=sw, 1=sq, 2=tri ... 6=sw,sq,tri
-			m_pVoices->SetLfoWave(w);
+			bool saw = pMessage[2];
+			m_pVoices->SetLfoWaveSaw(saw);
 		}	
+		if (pMessage[1] == CC_LFO_SQUARE)
+		{
+			bool sq = pMessage[2];
+			m_pVoices->SetLfoWaveSquare(sq);
+		}
+		if (pMessage[1] == CC_LFO_TRI)
+		{
+			bool tri = pMessage[2];
+			m_pVoices->SetLfoWaveTri(tri);
+		}
 		if (pMessage[1] == CC_LFO_FM1)
 		{
 			bool fm1 = pMessage[2];				// 0 ... 1
